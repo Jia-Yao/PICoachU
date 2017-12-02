@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_camera"
+        android:icon="@drawable/camera_white"
+        android:title="@string/title_camera"/>
+
+    <item
+        android:id="@+id/navigation_explore"
+        android:icon="@drawable/search_white"
+        android:title="@string/title_explore"/>
+
+    <item
+        android:id="@+id/navigation_challenges"
+        android:icon="@drawable/task_white"
+        android:title="@string/title_challenges"/>
+
+    <item
+        android:id="@+id/navigation_me"
+        android:icon="@drawable/person_white"
+        android:title="@string/title_me"/>
+
+</menu>

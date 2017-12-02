@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">PICoachU</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_explore">Explore</string>
+    <string name="title_challenges">Challenges</string>
+    <string name="title_me">Me</string>
+    <string name="profile_photo">profile photo</string>
+    <string name="my_photos">Photos</string>
+    <string name="my_challenges">Challenges</string>
+    <string name="remove">Decline</string>
+    <string name="comment_hint">Enter your comment</string>
+    <string name="tags">Tags:</string>
+    <string name="comments">Comments:</string>
+    <string name="title_activity_select_task">SelectTaskActivity</string>
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="intro_message">
+        <![CDATA[
+
+
+            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
+            you can display camera preview and take pictures.
+
+
+        ]]>
+    </string>
+</resources>
