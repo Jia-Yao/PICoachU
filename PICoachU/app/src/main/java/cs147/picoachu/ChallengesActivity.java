@@ -10,7 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class ChallengesActivity extends AppCompatActivity {
@@ -71,14 +74,51 @@ public class ChallengesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenges);
 
-        title=(TextView)findViewById(R.id.title);
-        Typeface face= Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Reg.ttf");
-        title.setTypeface(face);
-        title.setTextColor(Color.BLACK);
+        /*TableLayout table = (TableLayout)findViewById(R.id.topicView);
+        TableRow tr = new TableRow(ChallengesActivity.this);
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(1, 0, 1, 0);
 
-        symmetryText = (TextView)findViewById(R.id.symmetryText);
-        symmetryText.setTypeface(face);
-        symmetryText.setTextColor(Color.BLACK);
+
+        int resID = getResources().getIdentifier("symmetry2", "drawable", "cs147.picoachu");
+        ImageView view = new ImageView(ChallengesActivity.this);
+        view.setImageResource(resID);
+        tr.addView(view, lp);
+        table.addView(tr);
+
+        tr = new TableRow(ChallengesActivity.this);
+        resID = getResources().getIdentifier("depth1", "drawable", "cs147.picoachu");
+        view = new ImageView(ChallengesActivity.this);
+        view.setImageResource(resID);
+        //view.getLayoutParams().height = 300;
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChallengesActivity.this, SelectTaskActivity.class);
+                i.putExtra("topicid", "depth");
+                i.putExtra("challengeIndex", 0);
+                startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            }
+        });
+        tr.addView(view, lp);
+        table.addView(tr);
+
+        tr = new TableRow(ChallengesActivity.this);
+        resID = getResources().getIdentifier("brightness1", "drawable", "cs147.picoachu");
+        view = new ImageView(ChallengesActivity.this);
+        view.setImageResource(resID);
+        //view.getLayoutParams().height = 300;
+        tr.addView(view, lp);
+        table.addView(tr);
+
+        tr = new TableRow(ChallengesActivity.this);
+        resID = getResources().getIdentifier("line1", "drawable", "cs147.picoachu");
+        view = new ImageView(ChallengesActivity.this);
+        view.setImageResource(resID);
+        //view.getLayoutParams().height = 300;
+        tr.addView(view, lp);
+        table.addView(tr);*/
+
 
         symmetry = (ImageView)findViewById(R.id.symmetry);
         symmetry.setOnClickListener(new View.OnClickListener() {
@@ -91,9 +131,6 @@ public class ChallengesActivity extends AppCompatActivity {
             }
         });
 
-        depthText = (TextView)findViewById(R.id.depthText);
-        depthText.setTypeface(face);
-        depthText.setTextColor(Color.BLACK);
 
         depth = (ImageView)findViewById(R.id.depth);
         depth.setOnClickListener(new View.OnClickListener() {
@@ -107,9 +144,6 @@ public class ChallengesActivity extends AppCompatActivity {
         });
 
 
-        brightnessText = (TextView)findViewById(R.id.brightnessText);
-        brightnessText.setTypeface(face);
-        brightnessText.setTextColor(Color.BLACK);
 
         brightness = (ImageView)findViewById(R.id.brightness);
         brightness.setOnClickListener(new View.OnClickListener() {
@@ -122,9 +156,7 @@ public class ChallengesActivity extends AppCompatActivity {
             }
         });
 
-        lineText = (TextView)findViewById(R.id.lineText);
-        lineText.setTypeface(face);
-        lineText.setTextColor(Color.BLACK);
+
 
         line = (ImageView)findViewById(R.id.line);
         line.setOnClickListener(new View.OnClickListener() {

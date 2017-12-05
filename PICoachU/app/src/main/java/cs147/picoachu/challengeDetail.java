@@ -95,30 +95,31 @@ public class challengeDetail extends AppCompatActivity {
         acceptButton = (Button)findViewById(R.id.acceptButton);
         declineButton = (Button)findViewById(R.id.declineButton);
 
-        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/DINCondensedBold.ttf");
-        title.setTypeface(face);
+        Typeface boldFace = Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Bold.ttf");
+        Typeface regFace = Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Reg.ttf");
+        title.setTypeface(boldFace);
         title.setTextColor(Color.BLACK);
 
         challengeDescription = (TextView)findViewById(R.id.challengeDescription);
         challengeDescription.setText((CharSequence)currChallenge.title);
-        challengeDescription.setTypeface(face);
+        challengeDescription.setTypeface(boldFace);
         challengeDescription.setTextColor(Color.BLACK);
 
         challengeDetail = (TextView)findViewById(R.id.challengeDetail);
         challengeDetail.setText((CharSequence)currChallenge.description);
-        challengeDetail.setTypeface(face);
+        challengeDetail.setTypeface(regFace);
         challengeDetail.setTextColor(Color.BLACK);
 
         sampleTitle = (TextView)findViewById(R.id.sampleTitle);
-        sampleTitle.setTypeface(face);
+        sampleTitle.setTypeface(regFace);
         sampleTitle.setTextColor(Color.BLACK);
 
         sample1 = (ImageView)findViewById(R.id.sample1);
         int resID = getResources().getIdentifier(currChallenge.examplePhotoName, "drawable", "cs147.picoachu");
         sample1.setImageResource(resID);
 
-        acceptButton.setTypeface(face);
-        declineButton.setTypeface(face);
+        acceptButton.setTypeface(boldFace);
+        declineButton.setTypeface(boldFace);
 
         ArrayList<Challenge> activeChallenges = new ArrayList<Challenge>();
         for(Challenge c : Data.challenges) {

@@ -34,7 +34,8 @@ public class SelectTaskActivity extends AppCompatActivity {
     Menu navigation_menu;
 
     TextView task;
-    TextView status;
+    TextView topic;
+    TextView progress;
 
     ImageView leftarrow;
     ImageView rightarrow;
@@ -90,6 +91,14 @@ public class SelectTaskActivity extends AppCompatActivity {
         }
 
         final String topicid = tempid;
+        String topicString = getTopic(topicid);
+
+        Typeface boldFace = Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Bold.ttf");
+        Typeface regFace = Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Reg.ttf");
+
+        topic = (TextView)findViewById(R.id.topic);
+        topic.setText((CharSequence)topicString);
+        topic.setTypeface(boldFace);
 
         ArrayList<Challenge> list = getList(topicid);
         ArrayList<Challenge> activeChallenges = new ArrayList<Challenge>();
@@ -100,11 +109,15 @@ public class SelectTaskActivity extends AppCompatActivity {
             }
         }
 
+        progress = (TextView)findViewById(R.id.progress);
+        String progressString = (list.size()-activeChallenges.size())+"/"+list.size();
+        progress.setText((CharSequence)progressString);
+        progress.setTypeface(boldFace);
+
         if(activeChallenges.size() == 0) {
             task = (TextView) findViewById(R.id.taskText);
-            Typeface face = Typeface.createFromAsset(getAssets(), "fonts/DINCondensedBold.ttf");
             task.setText("All challenges under this topic are either in process or completed.");
-            task.setTypeface(face);
+            task.setTypeface(boldFace);
             task.setTextColor(Color.BLACK);
             moreButton = (Button) findViewById(R.id.moreButton);
             leftarrow = (ImageView) findViewById(R.id.leftarrow);
@@ -123,13 +136,12 @@ public class SelectTaskActivity extends AppCompatActivity {
             final int rightIndex = (index < activeChallenges.size() - 1) ? (index + 1) : (0);
 
             task = (TextView) findViewById(R.id.taskText);
-            Typeface face = Typeface.createFromAsset(getAssets(), "fonts/DINCondensedBold.ttf");
             task.setText((CharSequence) currChallenge.title);
-            task.setTypeface(face);
+            task.setTypeface(boldFace);
             task.setTextColor(Color.BLACK);
 
             moreButton = (Button) findViewById(R.id.moreButton);
-            moreButton.setTypeface(face);
+            moreButton.setTypeface(boldFace);
 
             leftarrow = (ImageView) findViewById(R.id.leftarrow);
             rightarrow = (ImageView) findViewById(R.id.rightarrow);
@@ -175,20 +187,6 @@ public class SelectTaskActivity extends AppCompatActivity {
             });
         }
 
-        /*status = (TextView)findViewById(R.id.status);
-        if(currUser.acceptedChallenges.contains(currChallenge.challengeid)) {
-            System.err.println("run");
-            status.setTypeface(face);
-            status.setText("In Process");
-            status.setTextColor(Color.BLACK);
-        }
-
-        if(currUser.completedChallenges.contains(currChallenge.challengeid)) {
-            status.setTypeface(face);
-            status.setText("Completed");
-            status.setTextColor(Color.BLACK);
-        }*/
-
         // Set up bottom bar
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -230,6 +228,25 @@ public class SelectTaskActivity extends AppCompatActivity {
 
             default:
                 return new ArrayList<Challenge>();
+        }
+    }
+
+    private String getTopic(String topicid) {
+        switch (topicid) {
+            case "symmetry":
+                return "Symmetry";
+
+            case "depth":
+                return "Depth";
+
+            case "brightness":
+                return "Brightness";
+
+            case "line":
+                return "Line";
+
+            default:
+                return "";
         }
     }
 
