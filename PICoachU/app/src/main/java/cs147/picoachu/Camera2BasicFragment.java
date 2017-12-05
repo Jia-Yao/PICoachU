@@ -22,8 +22,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -44,6 +47,7 @@ import android.media.ImageReader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -61,6 +65,7 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.Switch;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -78,6 +83,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import pl.droidsonroids.gif.GifImageView;
+
 
 public class Camera2BasicFragment extends Fragment
         implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -246,6 +252,8 @@ public class Camera2BasicFragment extends Fragment
      */
     private File mFile;
 
+    private Image img;
+
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -255,8 +263,8 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-//            Image img = reader.acquireLatestImage();
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            img = reader.acquireLatestImage();
+            mBackgroundHandler.post(new ImageSaver(img, mFile));
         }
 
     };
@@ -939,6 +947,22 @@ public class Camera2BasicFragment extends Fragment
                 String imageFileName = "JPEG_" + timeStamp + ".jpg";
                 mFile = new File(getActivity().getExternalFilesDir(Integer.toString(Data.currentUserId)), imageFileName);
                 takePicture();
+                Intent i = new Intent(getActivity(), PublishActivity.class);
+                i.putExtra("img_path", mFile.toString());
+//                if (img==null)
+//                    break;
+//                Image.Plane[] planes = img.getPlanes();
+//                ByteBuffer buffer = img.getPlanes()[0].getBuffer();
+//                byte[] bytes = new byte[buffer.capacity()];
+//                buffer.get(bytes);
+//                Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+//
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//                bytes = stream.toByteArray();
+//                i.putExtra("bytes",bytes);
+                SystemClock.sleep(500);
+                startActivity(i);
                 break;
             }
             case R.id.info: {
