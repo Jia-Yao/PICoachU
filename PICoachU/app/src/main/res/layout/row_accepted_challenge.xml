@@ -22,7 +22,7 @@
         android:minWidth="0dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text="@string/remove"
+        android:text="UNACCEPT"
         android:textColor="@color/colorPrimary"/>
 
 </LinearLayout>

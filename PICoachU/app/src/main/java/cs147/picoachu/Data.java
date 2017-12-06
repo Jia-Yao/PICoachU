@@ -11,6 +11,15 @@ public class Data{
     static int currentUserId = 1;
     static int totalUsers = 3;
 
+    static String challenge1Short = "Learn how to use lines in the composition.";
+    static String challenge2Short = "Explore the beauty of symmetry in buildings.";
+    static String challenge3Short = "Symmetry exists in everywhere of the nature.";
+    static String challenge4Short = "Capture moments during sunrise and sunset.";
+    static String challenge5Short = "Find out the beauty of night with this challenge.";
+    static String challenge6Short = "Depth is the key to the beauty along the road.";
+    static String challenge7Short = "TODO";
+    static String challenge8Short = "TODO";
+
     static String challenge1Description = "  A very powerful method of improving the composition of photos is the use of lines. Properly used, lines can significantly increase the impact of images. Lines serve to affect photographic composition.";
     static String challenge2Description = "  Symmetry finds its ways into architecture at every scale, from the overall external views of buildings such as Gothic cathedrals and The White House.";
     static String challenge3Description = "  Symmetry is beautiful. Symmetry appears everywhere in natrue. Think about where these symmetries appear. Some objects can have several symmetries at once, such as both reflectional and rotational symmetry.";
@@ -22,28 +31,28 @@ public class Data{
     // ------------------------------
 
     static Challenge challenge1 = new Challenge(1, "Abstract Lines and Curves",
-            "Abstract", challenge1Description, "examplephoto1");
+            "Abstract", challenge1Short, challenge1Description, "examplephoto1");
 
     static Challenge challenge2 = new Challenge(2, "Symmetry in Building",
-            "Symmetry", challenge2Description, "examplephoto2");
+            "Symmetry", challenge2Short, challenge2Description, "examplephoto2");
 
     static Challenge challenge3 = new Challenge(3, "Symmetry in Nature",
-            "Symmetry", challenge3Description, "examplephoto3");
+            "Symmetry", challenge3Short, challenge3Description, "examplephoto3");
 
     static Challenge challenge4 = new Challenge(4, "Lighting at Sunrise or Sunset",
-            "Lighting", challenge4Description, "examplephoto4");
+            "Lighting", challenge4Short, challenge4Description, "examplephoto4");
 
     static Challenge challenge5 = new Challenge(5, "Lighting at Night",
-            "Lighting", challenge5Description, "examplephoto5");
+            "Lighting", challenge5Short, challenge5Description, "examplephoto5");
 
     static Challenge challenge6 = new Challenge(6, "Depth of Road",
-            "Depth", challenge6Description, "examplephoto6");
+            "Depth", challenge6Short, challenge6Description, "examplephoto6");
 
     static Challenge challenge7 = new Challenge(7, "Emphasis using Spacing",
-            "Emphasis", challenge7Description, "examplephoto7");
+            "Emphasis", challenge7Short, challenge7Description, "examplephoto7");
 
     static Challenge challenge8 = new Challenge(8, "Emphasis using Color",
-            "Emphasis", challenge8Description, "examplephoto8");
+            "Emphasis", challenge8Short, challenge8Description, "examplephoto8");
 
     // ------------------------------
 
@@ -254,13 +263,16 @@ class Challenge {
 
     public String topic;
 
+    public String shortDescription;
+
     public String description;
 
     public String examplePhotoName;
 
-    public Challenge(int _challengeid, String _title, String _topic, String _description, String _examplePhotoName){
+    public Challenge(int _challengeid, String _title, String _topic, String _shortDescription, String _description, String _examplePhotoName){
         challengeid = _challengeid;
         title = _title;
+        shortDescription = _shortDescription;
         topic = _topic;
         description = _description;
         examplePhotoName = _examplePhotoName;

@@ -95,7 +95,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="#b3b3b3"
-        android:text="Decline"
+        android:text="Unaccept"
         android:textColor="#fff"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/acceptButton"

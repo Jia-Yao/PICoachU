@@ -35,8 +35,12 @@ public class SelectTaskActivity extends AppCompatActivity {
 
     TextView task;
     TextView topic;
+    TextView topicDescription;
     TextView progress;
+    TextView taskDescription;
+    TextView empty;
 
+    ImageView sample;
     ImageView leftarrow;
     ImageView rightarrow;
 
@@ -92,6 +96,7 @@ public class SelectTaskActivity extends AppCompatActivity {
 
         final String topicid = tempid;
         String topicString = getTopic(topicid);
+        String description = getDescription(topicid);
 
         Typeface boldFace = Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Bold.ttf");
         Typeface regFace = Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Reg.ttf");
@@ -99,6 +104,10 @@ public class SelectTaskActivity extends AppCompatActivity {
         topic = (TextView)findViewById(R.id.topic);
         topic.setText((CharSequence)topicString);
         topic.setTypeface(boldFace);
+
+        topicDescription = (TextView)findViewById(R.id.topicdescription);
+        topicDescription.setText((CharSequence)description);
+        topicDescription.setTypeface(boldFace, Typeface.ITALIC);
 
         ArrayList<Challenge> list = getList(topicid);
         ArrayList<Challenge> activeChallenges = new ArrayList<Challenge>();
@@ -115,18 +124,24 @@ public class SelectTaskActivity extends AppCompatActivity {
         progress.setTypeface(boldFace);
 
         if(activeChallenges.size() == 0) {
+            empty = (TextView) findViewById(R.id.empty);
+            empty.setText("All challenges under this topic are either in process or completed.");
+            empty.setTypeface(boldFace);
+            empty.setTextColor(Color.BLACK);
             task = (TextView) findViewById(R.id.taskText);
-            task.setText("All challenges under this topic are either in process or completed.");
-            task.setTypeface(boldFace);
-            task.setTextColor(Color.BLACK);
             moreButton = (Button) findViewById(R.id.moreButton);
             leftarrow = (ImageView) findViewById(R.id.leftarrow);
             rightarrow = (ImageView) findViewById(R.id.rightarrow);
+            taskDescription = (TextView)findViewById(R.id.taskdescription);
+            sample = (ImageView)findViewById(R.id.sample);
             ViewGroup layout = (ViewGroup) moreButton.getParent();
             if(null!=layout) {//for safety only  as you are doing onClick
+                layout.removeView(task);
                 layout.removeView(moreButton);
                 layout.removeView(leftarrow);
                 layout.removeView(rightarrow);
+                layout.removeView(taskDescription);
+                layout.removeView(sample);
             }
         }
         else {
@@ -139,6 +154,15 @@ public class SelectTaskActivity extends AppCompatActivity {
             task.setText((CharSequence) currChallenge.title);
             task.setTypeface(boldFace);
             task.setTextColor(Color.BLACK);
+
+            taskDescription = (TextView)findViewById(R.id.taskdescription);
+            taskDescription.setText((CharSequence)currChallenge.shortDescription);
+            taskDescription.setTypeface(regFace);
+            taskDescription.setTextColor(Color.BLACK);
+
+            sample = (ImageView)findViewById(R.id.sample);
+            int resID = getResources().getIdentifier(currChallenge.examplePhotoName, "drawable", "cs147.picoachu");
+            sample.setImageResource(resID);
 
             moreButton = (Button) findViewById(R.id.moreButton);
             moreButton.setTypeface(boldFace);
@@ -244,6 +268,25 @@ public class SelectTaskActivity extends AppCompatActivity {
 
             case "line":
                 return "Line";
+
+            default:
+                return "";
+        }
+    }
+
+    private String getDescription(String topicid) {
+        switch (topicid) {
+            case "symmetry":
+                return "All about balance.";
+
+            case "depth":
+                return "Depth and beauty.";
+
+            case "brightness":
+                return "Brilliance of colour.";
+
+            case "line":
+                return "Skeleton of the photo.";
 
             default:
                 return "";
