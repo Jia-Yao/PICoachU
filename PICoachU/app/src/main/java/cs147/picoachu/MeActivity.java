@@ -98,6 +98,10 @@ public class MeActivity extends AppCompatActivity {
         MenuItem menuItem = navigation_menu.getItem(3);
         menuItem.setChecked(true);
 
+
+        // update user photos
+        Data.UpdateAllUsers(getExternalFilesDir(null).toString());
+
         // Set up profile information
         ImageView imageView = (ImageView) findViewById(R.id.profilePhotoView);
         int resID = getResources().getIdentifier(Data.getUser(userid).profilePhotoName, "drawable", "cs147.picoachu");
@@ -264,6 +268,8 @@ public class MeActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         overridePendingTransition(0, 0);
+        // dump info of extra images to json files
+        Data.DumpAllUsers(getExternalFilesDir(null).toString());
     }
 
 }

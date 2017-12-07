@@ -7,20 +7,6 @@
     android:layout_height="match_parent"
     tools:context="cs147.picoachu.PhotoDetailActivity">
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:background="@color/colorPrimaryDark"
-        app:itemIconTint="@color/navigation_item_selector"
-        app:itemTextColor="@color/navigation_item_selector"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
-
     <android.support.v7.widget.CardView
         android:id="@+id/input"
         android:layout_width="0dp"
@@ -35,35 +21,48 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginTop="4dp"
-            android:orientation="horizontal"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/commentInput"
+                android:id="@+id/tagsInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:text=""
-                android:hint="@string/comment_hint"/>
+                android:hint="@string/comment_hint"
+                android:text="" />
 
             <ImageButton
                 android:id="@+id/sendButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                app:srcCompat="@drawable/send_white"
-                android:theme="@style/SendButton"/>
+                android:theme="@style/SendButton"
+                app:srcCompat="@drawable/send_white" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:background="@color/colorPrimaryDark"
+        app:itemIconTint="@color/navigation_item_selector"
+        app:itemTextColor="@color/navigation_item_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/input"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -77,65 +76,67 @@
                 android:id="@+id/userPhotoView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"/>
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.3"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_weight="0.1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/ownerNameView"
+
+            <LinearLayout
+                android:id="@+id/addTagsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
-                android:gravity="center_horizontal"
-                android:text=""
-                android:textColor="@color/colorPrimaryDark"/>
+                android:orientation="horizontal">
 
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp">
-
-                <LinearLayout
-                    android:id="@+id/tagsView"
+                <TextView
+                    android:id="@+id/addTags"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/tags"
+                    android:textColor="@color/colorPrimaryDark" />
 
-                    <TextView
-                        android:id="@+id/tags"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:text="@string/tags"
-                        android:textColor="@color/colorPrimaryDark"/>
-                </LinearLayout>
-            </HorizontalScrollView>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/comments"
-                android:textColor="@color/colorPrimaryDark"/>
-
-            <ListView
-                android:id="@+id/commentsList"
+            <LinearLayout
+                android:id="@+id/submitChallengeView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fadeScrollbars="false">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            </ListView>
+                <TextView
+                    android:id="@+id/submitChallenge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/submitChallenge"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <Spinner
+                    android:id="@+id/challengeDropDown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="50dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Publish" />
     </LinearLayout>
 
 

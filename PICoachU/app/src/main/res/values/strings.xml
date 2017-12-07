@@ -10,6 +10,7 @@
     <string name="remove">Decline</string>
     <string name="comment_hint">Enter your comment</string>
     <string name="tags">Tags:</string>
+    <string name="submitChallenge">Submit to Challenge:</string>
     <string name="comments">Comments:</string>
     <string name="title_activity_select_task">SelectTaskActivity</string>
     <string name="picture">Picture</string>

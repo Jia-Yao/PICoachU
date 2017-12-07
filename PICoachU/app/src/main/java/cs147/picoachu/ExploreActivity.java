@@ -82,7 +82,6 @@ public class ExploreActivity extends AppCompatActivity {
 
 
 
-
         sendButton = (ImageButton) findViewById(R.id.sendButton);
         sendButton.setEnabled(false);
         commentInput = (EditText) findViewById(R.id.commentInput);
@@ -114,7 +113,7 @@ public class ExploreActivity extends AppCompatActivity {
                 SquareImageView image;
                 int counter = 0, resID;
                 //ArrayList<Integer> photoids = Data.getUser(Data.currentUserId).photos;
-                for (int i =1; i<= 10; i++){
+                for (int i =1; i<= Data.getMaxPhotoId(); i++){
                     if (counter%3 == 0){
                         tr = new TableRow(ExploreActivity.this);
                         tr.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));

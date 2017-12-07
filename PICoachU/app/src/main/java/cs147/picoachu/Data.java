@@ -1,6 +1,7 @@
 package cs147.picoachu;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Hard coded app data
@@ -183,6 +185,13 @@ public class Data{
         }
     }
 
+    public static int getMaxPhotoId(){
+        Set<Integer> keys = photoMap.keySet();
+        if (! keys.isEmpty())
+            return Collections.max(keys);
+        else
+            return 10;
+    }
     public static Photo getPhoto(int id){
         switch (id){
             case 1:
@@ -223,15 +232,16 @@ public class Data{
     public static void UpdateUserPhotos(String extDir, User user){
         File userDir = new File(extDir,Integer.toString(user.userid));
         File[] files = userDir.listFiles();
-        for (File file : files){
-            String[] presuf = file.toString().split(".");
-            if (presuf.length==2 & presuf[1].equals("jpg")){
-                Photo newPhoto = getPhoto(extDir, presuf[0]);
-                photoMap.put(Collections.max(user.photos)+1, newPhoto);
-                user.photos.add(Collections.max(user.photos)+1);
-            }
-            else{
-                continue;
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                String[] presuf = file.toString().split(".");
+                if (presuf.length == 2 & presuf[1].equals("jpg") & !photoMapStr.containsKey(Integer.toString(user.userid) + presuf[0])) {
+                    Photo newPhoto = getPhoto(extDir, presuf[0]);
+                    photoMap.put(Collections.max(user.photos) + 1, newPhoto);
+                    user.photos.add(Collections.max(user.photos) + 1);
+                } else {
+                    continue;
+                }
             }
         }
     }
@@ -251,27 +261,33 @@ public class Data{
             if (id <= 10){
                 continue;
             }
+            Photo photo = getPhoto(id);
             JSONObject obj = new JSONObject();
-            obj.put("challengeId", getPhoto(id).forChallenge);
+            try {
+                obj.put("challengeId", photo.forChallenge);
 
-            JSONArray taglist = new JSONArray();
-            for (String tag : taglist){
-                taglist.add(tag);
-            }
-            obj.put("tags", taglist);
+                JSONArray taglist = new JSONArray();
+                for (String tag : photo.tags) {
+                    taglist.put(tag);
+                }
+                obj.put("tags", taglist);
 
-            JSONArray commentlist = new JSONArray();
-            for (ArrayList<String> comments : commentlist){
+                JSONArray commentlist = new JSONArray();
+                for (ArrayList<String> comments : photo.comments) {
 //                JSONArray comment = new JSONArray();
 //                for (String c : comments)
 //                    comment.add(c);
-                commentlist.add(comments);
+                    commentlist.put(comments);
+                }
+                obj.put("comments", commentlist);
             }
-            obj.put("comments", commentlist);
+            catch (JSONException e){
+                System.out.print(e.toString());
+            }
 
-            File jsonFile = new File(extDir, Integer.toString(user.userid)+'/'+getPhoto(id).photoName+'_info.json');
+            File jsonFile = new File(extDir, Integer.toString(user.userid)+'/'+getPhoto(id).photoName+"_info.json");
             try (FileWriter file = new FileWriter(jsonFile)) {
-                file.write(obj.toJSONString());
+                file.write(obj.toString());
                 file.flush();
 
             } catch (IOException e) {
@@ -292,20 +308,31 @@ public class Data{
             int _ownerid = currentUserId;
             String _userPhotoName = "";
             int _forChallenge = -1;
-            ArrayList<String> _tags;
-            ArrayList<ArrayList<String>> _comments;
+            ArrayList<String> _tags = new ArrayList<String>();
+            ArrayList<ArrayList<String>> _comments = new ArrayList<ArrayList<String>>();
             // decode json file for challenges, tags and comments
-            File jsonFile = new File(extDir, Integer.toString(_ownerid)+'/'+photoName+'_info.json');
+            File jsonFile = new File(extDir, Integer.toString(_ownerid)+'/'+photoName+"_info.json");
             if (jsonFile.exists()){
                 JSONParser parser = new JSONParser();
-                Object obj = parser.parse(new FileReader(jsonFile));
-                JSONObject jsonObject = (JSONObject) obj;
-                _forChallenge = (int) obj.get("challengeId");
-                _tags = (ArrayList<String>) obj.get("tags");
-                _comments = (ArrayList<ArrayList<String>>) obj.get("comments");
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    Object obj = parser.parse(new FileReader(jsonFile));
+                    jsonObject = (JSONObject) obj;
+                }
+                catch (Exception e){
+                    System.out.print(e.toString());
+                }
+                try {
+                    _forChallenge = (int) jsonObject.get("challengeId");
+                    _tags = (ArrayList<String>) jsonObject.get("tags");
+                    _comments = (ArrayList<ArrayList<String>>) jsonObject.get("comments");
+                }
+                catch (JSONException e){
+                    System.out.print(e.toString());
+                }
             }
             Photo newphoto = new Photo( photoName, _ownerid,  _forChallenge, _userPhotoName,_tags,  _comments);
-//            photoMapStr.put(Integer.toString(currentUserId)+photoName, newphoto);
+            photoMapStr.put(Integer.toString(currentUserId)+photoName, newphoto);
             return newphoto;
         }
         return photoMapStr.get(photoName);
