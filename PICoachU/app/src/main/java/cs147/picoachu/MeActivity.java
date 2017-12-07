@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -133,8 +136,20 @@ public class MeActivity extends AppCompatActivity {
             }
             RelativeLayout r = new RelativeLayout(this);
             image = new SquareImageView(this);
-            resID = getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
-            image.setImageResource(resID);
+            Photo photo = Data.getPhoto(photoid);
+            if (photo.userPhotoName.equals("")){
+                String imgPath = getApplicationContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                File imgFile = new  File(imgPath);
+
+                if(imgFile.exists()){
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    image.setImageBitmap(myBitmap);
+                }
+            }
+            else {
+                resID = getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
+                image.setImageResource(resID);
+            }
             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -373,8 +388,31 @@ class CompletedListAdapter extends ArrayAdapter<Integer> {
                 int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics());
                 lp.setMargins(0, px, 0, px);
                 SquareImageView image = new SquareImageView(context);
-                int resID = context.getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
-                image.setImageResource(resID);
+                if (photo.userPhotoName.equals("")){
+                    String imgPath = getContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                    File imgFile = new  File(imgPath);
+
+                    if(imgFile.exists()){
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        image.setImageBitmap(myBitmap);
+                    }
+                }
+                else{
+                    if (photo.userPhotoName.equals("")){
+                        String imgPath = getContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                        File imgFile = new  File(imgPath);
+
+                        if(imgFile.exists()){
+                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                            image.setImageBitmap(myBitmap);
+                        }
+                    }
+                    else {
+                        int resID = context.getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
+                        image.setImageResource(resID);
+                    }
+                }
+
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override

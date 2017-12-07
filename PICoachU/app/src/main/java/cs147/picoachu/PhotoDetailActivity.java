@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
@@ -41,6 +43,7 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class PhotoDetailActivity extends AppCompatActivity {
@@ -123,8 +126,20 @@ public class PhotoDetailActivity extends AppCompatActivity {
 
         userPhotoFrame = (RelativeLayout) findViewById(R.id.userPhotoFrame);
         final ImageView imageView = (ImageView) findViewById(R.id.userPhotoView);
-        int resID = getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
-        imageView.setImageResource(resID);
+        Photo photo = Data.getPhoto(photoid);
+            if (photo.userPhotoName.equals("")){
+                String imgPath = getApplicationContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                File imgFile = new  File(imgPath);
+
+                if(imgFile.exists()){
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imageView.setImageBitmap(myBitmap);
+                }
+            }
+            else {
+            int resID = getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
+            imageView.setImageResource(resID);
+        }
         imageView.setOnTouchListener(new OnTouchListener() {
 
             @Override
