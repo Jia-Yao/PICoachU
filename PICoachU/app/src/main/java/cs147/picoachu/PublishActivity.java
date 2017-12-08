@@ -1,20 +1,40 @@
 package cs147.picoachu;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +46,10 @@ public class PublishActivity extends AppCompatActivity {
 
     BottomNavigationView navigation;
     Menu navigation_menu;
+    Typeface type;
+    Typeface type_reg;
+    ArrayList<String> inputTags;
+    LinearLayout addTagsView;
 
     // Switch to other activities
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -72,6 +96,9 @@ public class PublishActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
+        type = Typeface.createFromAsset(getAssets(),"fonts/DIN Condensed Bold.ttf");
+        type_reg = Typeface.createFromAsset(getAssets(),"fonts/DIN Condensed Reg.ttf");
+        inputTags = new ArrayList<String>();
 
         // Set up bottom bar
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -128,6 +155,90 @@ public class PublishActivity extends AppCompatActivity {
 
         spinner.setOnItemSelectedListener(new SpinnerActivity());
 
+        // Set add tag button
+        addTagsView = (LinearLayout) findViewById(R.id.addTagsView);
+        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(4, 0, 4, 0);
+        ImageButton addTagButton = (ImageButton)findViewById(R.id.addTagButton);
+        addTagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PublishActivity.this);
+                TextView title = new TextView(PublishActivity.this);
+                title.setText("Enter Tag");
+                title.setTypeface(type);
+                title.setPadding(0, 30, 0, 10);
+                title.setGravity(Gravity.CENTER);
+                title.setTextSize(22);
+                builder.setCustomTitle(title);
+                // Set up the input
+                final EditText input = new EditText(PublishActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                input.setTypeface(type_reg);
+                input.setTextSize(20);
+                builder.setView(input);
+                builder.setCancelable(true);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        inputTags.add(input.getText().toString());
+                        TextView tagView = new TextView(PublishActivity.this);
+                        tagView.setText(input.getText().toString());
+                        tagView.setTypeface(type_reg);
+                        tagView.setTextSize(18);
+                        tagView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        tagView.setBackgroundResource(R.drawable.tag_rounded_corners);
+                        addTagsView.addView(tagView, lp);
+                        // Hide keyboard
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputManager.hideSoftInputFromWindow(v.getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
+                        dialog.cancel();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+                // Disable ok button if input is empty
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                final Button okButton = alert.getButton(AlertDialog.BUTTON_POSITIVE);
+                input.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable arg0) {}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if(TextUtils.isEmpty(input.getText())) {
+                            okButton.setEnabled(false);
+                        } else {
+                            okButton.setEnabled(true);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    // When this activity is resumed
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        MenuItem menuItem = navigation_menu.getItem(0);
+        menuItem.setChecked(true);
+    }
+
+    // Remove transition animation
+    @Override
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
     }
 
     // properties for new photo
@@ -177,7 +288,8 @@ public class PublishActivity extends AppCompatActivity {
         2. add photo to user
         3. dump json file
         4. change challenge status in user
-
     */
+
+
 
 }
