@@ -569,7 +569,7 @@ public class Camera2BasicFragment extends Fragment
                 Collections.reverse(outputSize);
                 Size largest = new Size(4,3);
                 for (Size s : outputSize){
-                    if (Math.abs(s.getWidth()/s.getHeight() - 4.0/3.0)<0.05){
+                    if (Math.abs(1.0*(s.getWidth())/s.getHeight() - 4.0/3.0)<0.05){
                         largest = s;
                         break;
                     }
