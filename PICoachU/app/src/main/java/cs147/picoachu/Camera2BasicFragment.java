@@ -1031,7 +1031,7 @@ public class Camera2BasicFragment extends Fragment
 
             Bitmap myBitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length,null);
             Bitmap resized = Bitmap.createScaledBitmap(myBitmap,(int)(myBitmap.getWidth()*0.2), (int)(myBitmap.getHeight()*0.2), true);
-            File smallerFile;
+            File smallerFile = new File("");
 
 
             FileOutputStream output = null;
@@ -1041,6 +1041,8 @@ public class Camera2BasicFragment extends Fragment
 
                 output.close();
                 // save smaller image
+
+
                 smallerFile = new File(mFile.getParent()+"/s"+mFile.getName());
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -1057,10 +1059,18 @@ public class Camera2BasicFragment extends Fragment
                     try {
                         output.close();
 
-//                        ExifInterface exifInterface = new ExifInterface(smallerFile.getPath());
-//                        exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION,
-//                                String.valueOf(orientation));
-//                        exifInterface.saveAttributes();
+                        ExifInterface exif = null;
+                        try {
+                            exif = new ExifInterface(mFile.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                ExifInterface.ORIENTATION_UNDEFINED);
+                        ExifInterface exifInterface = new ExifInterface(smallerFile.getPath());
+                        exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION,
+                                String.valueOf(orientation));
+                        exifInterface.saveAttributes();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

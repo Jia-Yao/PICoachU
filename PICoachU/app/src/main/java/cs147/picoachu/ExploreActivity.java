@@ -233,9 +233,9 @@ public class ExploreActivity extends AppCompatActivity {
 
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                    //Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+                    Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
 
-                    image.setImageBitmap(myBitmap);
+                    image.setImageBitmap(bmRotated);
                 }
             }
             else {

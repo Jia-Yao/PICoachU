@@ -88,8 +88,8 @@
         android:layout_above="@+id/control"
         android:layout_centerHorizontal="true"
         android:cropToPadding="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/ins_rightarrow"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ins_arrow_right"
         android:visibility="invisible" />
 
 </RelativeLayout>

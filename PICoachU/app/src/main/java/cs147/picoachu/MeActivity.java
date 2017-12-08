@@ -160,9 +160,9 @@ public class MeActivity extends AppCompatActivity {
 
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                    //Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+                    Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
 
-                    image.setImageBitmap(myBitmap);
+                    image.setImageBitmap(bmRotated);
                 }
             }
             else {
@@ -435,9 +435,9 @@ class CompletedListAdapter extends ArrayAdapter<Integer> {
 
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                        //Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+                        Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
 
-                        image.setImageBitmap(myBitmap);
+                        image.setImageBitmap(bmRotated);
                     }
                 }
                 else{
