@@ -42,6 +42,7 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
@@ -1023,13 +1024,31 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void run() {
+
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
+
+            Bitmap myBitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length,null);
+            Bitmap resized = Bitmap.createScaledBitmap(myBitmap,(int)(myBitmap.getWidth()*0.2), (int)(myBitmap.getHeight()*0.2), true);
+            File smallerFile;
+
+
             FileOutputStream output = null;
             try {
                 output = new FileOutputStream(mFile);
                 output.write(bytes);
+
+                output.close();
+                // save smaller image
+                smallerFile = new File(mFile.getParent()+"/s"+mFile.getName());
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] smallerBytes = stream.toByteArray();
+                output = new FileOutputStream(smallerFile);
+                output.write(smallerBytes);
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -1037,6 +1056,11 @@ public class Camera2BasicFragment extends Fragment
                 if (null != output) {
                     try {
                         output.close();
+
+//                        ExifInterface exifInterface = new ExifInterface(smallerFile.getPath());
+//                        exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION,
+//                                String.valueOf(orientation));
+//                        exifInterface.saveAttributes();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -218,7 +218,7 @@ public class ExploreActivity extends AppCompatActivity {
 
             Photo photo = Data.getPhoto(photoid);
             if (photo.userPhotoName.equals("")){
-                String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+"/s"+photo.photoName;
                 File imgFile = new  File(imgPath);
 
                 if(imgFile.exists()){
@@ -233,9 +233,9 @@ public class ExploreActivity extends AppCompatActivity {
 
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                    Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+                    //Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
 
-                    image.setImageBitmap(bmRotated);
+                    image.setImageBitmap(myBitmap);
                 }
             }
             else {
@@ -255,7 +255,7 @@ public class ExploreActivity extends AppCompatActivity {
                 }
             });
             tr.addView(image, lp);
-            if (counter%3 == 2 || counter == 10-1){
+            if (counter%3 == 2 || counter == Data.getMaxPhotoId()-1){
                 table.addView(tr);
             }
             counter++;

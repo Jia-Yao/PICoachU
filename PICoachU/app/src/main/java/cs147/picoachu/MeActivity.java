@@ -146,7 +146,7 @@ public class MeActivity extends AppCompatActivity {
             image = new SquareImageView(this);
             Photo photo = Data.getPhoto(photoid);
             if (photo.userPhotoName.equals("")){
-                String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+'/'+photo.photoName;
+                String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+"/s"+photo.photoName;
                 File imgFile = new  File(imgPath);
                 if(imgFile.exists()){
                     ExifInterface exif = null;
@@ -160,9 +160,9 @@ public class MeActivity extends AppCompatActivity {
 
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                    Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+                    //Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
 
-                    image.setImageBitmap(bmRotated);
+                    image.setImageBitmap(myBitmap);
                 }
             }
             else {
@@ -420,7 +420,7 @@ class CompletedListAdapter extends ArrayAdapter<Integer> {
                 lp.setMargins(0, px, 0, px);
                 SquareImageView image = new SquareImageView(context);
                 if (photo.userPhotoName.equals("")){
-                    String imgPath = getContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+'/'+photo.photoName;
+                    String imgPath = getContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+"/s"+photo.photoName;
                     File imgFile = new  File(imgPath);
 
                     if(imgFile.exists()){
@@ -435,9 +435,9 @@ class CompletedListAdapter extends ArrayAdapter<Integer> {
 
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                        Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+                        //Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
 
-                        image.setImageBitmap(bmRotated);
+                        image.setImageBitmap(myBitmap);
                     }
                 }
                 else{
