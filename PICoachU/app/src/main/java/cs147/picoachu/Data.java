@@ -322,8 +322,8 @@ public class Data{
             }
         }
 
-    private static HashMap<String, Photo> photoMapStr = new HashMap<>();
-    private static HashMap<Integer, Photo> photoMap = new HashMap<>();        // use this to map id to photos
+    public static HashMap<String, Photo> photoMapStr = new HashMap<>();
+    public static HashMap<Integer, Photo> photoMap = new HashMap<>();        // use this to map id to photos
     public static Photo getPhoto(String extDir, String photoName){
         /*
             decode json file and load to photomap

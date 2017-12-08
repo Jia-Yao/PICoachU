@@ -110,14 +110,14 @@ public class MeActivity extends AppCompatActivity {
         ImageView imageView = (ImageView) findViewById(R.id.profilePhotoView);
         int resID = getResources().getIdentifier(Data.getUser(userid).profilePhotoName, "drawable", "cs147.picoachu");
         imageView.setImageResource(resID);
-//        imageView.setOnLongClickListener(new OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                Data.nextUser();
-//                recreate();
-//                return true;
-//            }
-//        });
+        imageView.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Data.nextUser();
+                recreate();
+                return true;
+            }
+        });
         TextView userNameView = (TextView) findViewById(R.id.userNameView);
         userNameView.setText(Data.getUser(userid).userName);
         userNameView.setTypeface(type);
@@ -144,7 +144,7 @@ public class MeActivity extends AppCompatActivity {
             }
             RelativeLayout r = new RelativeLayout(this);
             image = new SquareImageView(this);
-            Photo photo = Data.getPhoto(photoid);
+            final Photo photo = Data.getPhoto(photoid);
             if (photo.userPhotoName.equals("")){
                 String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+"/s"+photo.photoName;
                 File imgFile = new  File(imgPath);
@@ -212,8 +212,10 @@ public class MeActivity extends AppCompatActivity {
                                         }
                                     }
                                     if (allRemoved){
-                                        currentUser.completedChallenges.remove(thisChallenge);
+                                        currentUser.completedChallenges.remove(new Integer(thisChallenge));
+                                        currentUser.acceptedChallenges.add(thisChallenge);
                                     }
+                                    Data.photoMap.remove(new Integer(photoid));
 
                                     recreate();
                                     dialog.cancel();

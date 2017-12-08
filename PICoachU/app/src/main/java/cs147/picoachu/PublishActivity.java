@@ -185,7 +185,7 @@ public class PublishActivity extends AppCompatActivity {
         Button publishButton = (Button) findViewById(R.id.publishButton) ;
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/DIN Condensed Bold.ttf");
         publishButton.setTypeface(face);
-        
+
         publishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
