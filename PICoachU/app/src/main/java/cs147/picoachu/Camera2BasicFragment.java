@@ -471,12 +471,16 @@ public class Camera2BasicFragment extends Fragment
                         public void run() {
                             GifImageView gf = view.findViewById(R.id.gifImageView);
                             if (INSTRUCTIONS_IND == 0)
-                                gf.setImageResource(R.drawable.ins_footprint);
+                                gf.setImageResource(R.drawable.ins_arrow_left);
                             else if (INSTRUCTIONS_IND==1)
-                                gf.setImageResource(R.drawable.ins_rightarrow);
+                                gf.setImageResource(R.drawable.ins_arrow_right);
+                            else if (INSTRUCTIONS_IND==2)
+                                gf.setImageResource(R.drawable.ins_footprint_backward);
+                            else if (INSTRUCTIONS_IND==3)
+                                gf.setImageResource(R.drawable.ins_footprint_forward);
 
                             INSTRUCTIONS_IND ++;
-                            INSTRUCTIONS_IND %= 2;
+                            INSTRUCTIONS_IND %= 4;
                         }
                     });
                 }
