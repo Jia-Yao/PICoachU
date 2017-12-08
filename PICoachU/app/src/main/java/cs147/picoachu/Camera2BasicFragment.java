@@ -566,6 +566,7 @@ public class Camera2BasicFragment extends Fragment
                 // For still image captures, we use the largest available size.
                 List<Size> outputSize = Arrays.asList(map.getOutputSizes(ImageFormat.JPEG));
                 Collections.sort(outputSize,new CompareSizesByArea());
+                Collections.reverse(outputSize);
                 Size largest = new Size(4,3);
                 for (Size s : outputSize){
                     if (Math.abs(s.getWidth()/s.getHeight() - 4.0/3.0)<0.05){
@@ -960,6 +961,7 @@ public class Camera2BasicFragment extends Fragment
                 takePicture();
                 Intent i = new Intent(getActivity(), PublishActivity.class);
                 i.putExtra("img_path", mFile.toString());
+                i.putExtra("img_name", imageFileName);
 //                if (img==null)
 //                    break;
 //                Image.Plane[] planes = img.getPlanes();

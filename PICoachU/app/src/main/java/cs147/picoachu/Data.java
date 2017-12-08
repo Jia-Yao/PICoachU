@@ -1,5 +1,7 @@
 package cs147.picoachu;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -219,7 +221,8 @@ public class Data{
                     return photoMap.get(id);
                 }
                 catch (Exception e){
-                    return null;
+                    Log.d("get photo", "get non-exist photo");
+                    return photo1;
                 }
         }
     }
@@ -243,8 +246,7 @@ public class Data{
                         jsonFile.exists() &&
                         !photoMapStr.containsKey(Integer.toString(user.userid) + imgName)) {
                     Photo newPhoto = getPhoto(extDir, imgName);
-                    photoMap.put(Collections.max(user.photos) + 1, newPhoto);
-                    user.photos.add(Collections.max(user.photos) + 1);
+                    AddNewPhoto(currentUserId, newPhoto);
                 } else {
                     continue;
                 }
@@ -252,22 +254,38 @@ public class Data{
         }
     }
 
+    public static void AddNewPhoto(Integer userid, Photo newPhoto){
+        User user = getUser(userid);
+        Integer photoid = getMaxPhotoId()+1;
+        photoMap.put(photoid, newPhoto);
+        user.photos.add(photoid);
+    }
     public static void DumpAllUsers(String extDir){
         DumpUserPhotos(extDir,user1);
         DumpUserPhotos(extDir,user2);
         DumpUserPhotos(extDir,user3);
     }
-    public static void DumpUserPhotos(String extDir, User user){
+
+    public static void DumpUserPhotos(String extDir, User user) {
         /*
             write new photo info back to json files.
 
             Suppose photoid > 10 is photo on file.
          */
-        for (int id : user.photos){
-            if (id <= 10){
+        for (int id : user.photos) {
+            if (id <= 10) {
                 continue;
             }
             Photo photo = getPhoto(id);
+            DumpUserPhoto(extDir, user, photo);
+        }
+    }
+    public static void DumpUserPhoto(String extDir, User user, Photo photo){
+        /*
+            write new photo info back to json files.
+
+            Suppose photoid > 10 is photo on file.
+         */
             JSONObject obj = new JSONObject();
             try {
                 obj.put("challengeId", photo.forChallenge);
@@ -286,26 +304,23 @@ public class Data{
                     commentlist.put(comments);
                 }
                 obj.put("comments", commentlist);
-            }
-            catch (JSONException e){
+            } catch (JSONException e) {
                 System.out.print(e.toString());
             }
 
-            File jsonFile = new File(extDir, Integer.toString(user.userid)+'/'+getPhoto(id).photoName+"_info.json");
+            File jsonFile = new File(extDir, Integer.toString(user.userid) + '/' + photo.photoName + "_info.json");
             try (FileWriter file = new FileWriter(jsonFile)) {
+                Log.d("dump json",obj.toString());
                 file.write(obj.toString());
                 file.flush();
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
-    }
 
-    private static HashMap<String, Photo> photoMapStr;
-    private static HashMap<Integer, Photo> photoMap;        // use this to map id to photos
+    private static HashMap<String, Photo> photoMapStr = new HashMap<>();
+    private static HashMap<Integer, Photo> photoMap = new HashMap<>();        // use this to map id to photos
     public static Photo getPhoto(String extDir, String photoName){
         /*
             decode json file and load to photomap
@@ -324,6 +339,7 @@ public class Data{
                 try {
                     Object obj = parser.parse(new FileReader(jsonFile));
                     jsonObject = (JSONObject) obj;
+                    Log.d("load json", obj.toString());
                 }
                 catch (Exception e){
                     System.out.print(e.toString());

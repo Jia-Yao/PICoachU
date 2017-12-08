@@ -38,6 +38,8 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
+import static java.lang.Boolean.FALSE;
+
 
 public class MeActivity extends AppCompatActivity {
 
@@ -100,7 +102,7 @@ public class MeActivity extends AppCompatActivity {
 
 
         // update user photos
-        //Data.UpdateAllUsers(getExternalFilesDir(null).toString());
+        Data.UpdateAllUsers(getExternalFilesDir(null).toString());
 
         // Set up profile information
         ImageView imageView = (ImageView) findViewById(R.id.profilePhotoView);
@@ -269,7 +271,7 @@ public class MeActivity extends AppCompatActivity {
         super.onPause();
         overridePendingTransition(0, 0);
         // dump info of extra images to json files
-        //Data.DumpAllUsers(getExternalFilesDir(null).toString());
+        Data.DumpAllUsers(getExternalFilesDir(null).toString());
     }
 
 }

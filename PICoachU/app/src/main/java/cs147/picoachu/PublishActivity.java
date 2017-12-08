@@ -53,8 +53,16 @@ public class PublishActivity extends AppCompatActivity {
     Menu navigation_menu;
     Typeface type;
     Typeface type_reg;
-    ArrayList<String> inputTags;
     LinearLayout addTagsView;
+
+    // properties for new photo
+    ArrayList<String> inputTags;
+    private int forChallenge = -1;
+    private int photoid;
+    private String photoName = "";
+    private int ownerid;
+    private String userPhotoName = "";
+    private ArrayList<ArrayList<String>> comments = new ArrayList<>();
 
     // Switch to other activities
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -161,6 +169,7 @@ public class PublishActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         String img_path;
         img_path = extras.getString("img_path");
+        String extPhotoName = extras.getString("img_name");
 //        byte[]  bs = getIntent().getByteArrayExtra("bytes");
 //        Bitmap b = BitmapFactory.decodeByteArray(
 //                bs,0,bs.length);
@@ -171,6 +180,8 @@ public class PublishActivity extends AppCompatActivity {
 //        }
 
         if (img_path!=null){
+            photoName = extPhotoName;
+
             File imgFile = new  File(img_path);
 
             if(imgFile.exists()){
@@ -212,8 +223,28 @@ public class PublishActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
         spinner.setOnItemSelectedListener(new SpinnerActivity());
+
+        // set publish button
+        Button publishButton = (Button) findViewById(R.id.publishButton) ;
+        publishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userid = Data.currentUserId;
+                ownerid = userid;
+                // add new photo to user's list
+                Photo newPhoto = FlushNewPhoto();
+                // write to json
+                Data.DumpUserPhoto(getExternalFilesDir(null).toString(),Data.getUser(userid), newPhoto);
+                // update challenge
+                if (Data.getUser(userid).acceptedChallenges.contains(forChallenge)){
+                    Data.getUser(userid).acceptedChallenges.remove(new Integer(forChallenge));
+                    Data.getUser(userid).completedChallenges.add(forChallenge);
+                }
+                Intent i = new Intent(PublishActivity.this, MeActivity.class);
+                startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            }
+        });
 
         // Set add tag button
         addTagsView = (LinearLayout) findViewById(R.id.addTagsView);
@@ -301,20 +332,15 @@ public class PublishActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-    // properties for new photo
-    private int forChallenge = -1;
-    private int photoid;
 
-    private String photoName;
+    // call back for publish button - save photo and infomation
+    private Photo FlushNewPhoto(){
+        Photo newPhoto = new Photo(photoName,ownerid,forChallenge,userPhotoName,inputTags,comments);
+        Data.AddNewPhoto(userid, newPhoto);
+        return newPhoto;
+    }
 
-    private int ownerid;
-
-    private String userPhotoName;
-
-    private ArrayList<String> tags;
-
-    private ArrayList<ArrayList<String>> comments;
-
+    // listener for spinner
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             // An item was selected. You can retrieve the selected item using
@@ -323,6 +349,7 @@ public class PublishActivity extends AppCompatActivity {
             String challenge = (String) parent.getItemAtPosition(pos);
             if (challenge!="None"){
                 Log.d("publish",challenge);
+                inputTags.add(challenge);
                 for (int chaId : Data.getUser(userid).acceptedChallenges){
                     if (Data.getChallenge(chaId).title == challenge){
                         forChallenge = chaId;
@@ -334,14 +361,10 @@ public class PublishActivity extends AppCompatActivity {
                     }
                 }
             }
-
-
         }
-
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
         }
-
     }
 
     /* TODO: call back for publish button:
