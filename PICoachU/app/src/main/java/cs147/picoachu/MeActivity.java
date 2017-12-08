@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -36,6 +37,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static java.lang.Boolean.FALSE;
@@ -144,12 +146,23 @@ public class MeActivity extends AppCompatActivity {
             image = new SquareImageView(this);
             Photo photo = Data.getPhoto(photoid);
             if (photo.userPhotoName.equals("")){
-                String imgPath = getApplicationContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+'/'+photo.photoName;
                 File imgFile = new  File(imgPath);
-
                 if(imgFile.exists()){
+                    ExifInterface exif = null;
+                    try {
+                        exif = new ExifInterface(imgFile.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_UNDEFINED);
+
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    image.setImageBitmap(myBitmap);
+
+                    Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+
+                    image.setImageBitmap(bmRotated);
                 }
             }
             else {
@@ -190,8 +203,18 @@ public class MeActivity extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     User currentUser = Data.getUser(Data.currentUserId);
+                                    int thisChallenge = Integer.valueOf(Data.getPhoto(photoid).forChallenge);
                                     currentUser.photos.remove(Integer.valueOf(photoid));
-                                    currentUser.completedChallenges.remove(Integer.valueOf(Data.getPhoto(photoid).forChallenge));
+                                    boolean allRemoved = true;
+                                    for (int photoid : currentUser.photos){
+                                        if (Data.getPhoto(photoid).forChallenge == thisChallenge){
+                                            allRemoved = false;
+                                        }
+                                    }
+                                    if (allRemoved){
+                                        currentUser.completedChallenges.remove(thisChallenge);
+                                    }
+
                                     recreate();
                                     dialog.cancel();
                                 }
@@ -397,28 +420,29 @@ class CompletedListAdapter extends ArrayAdapter<Integer> {
                 lp.setMargins(0, px, 0, px);
                 SquareImageView image = new SquareImageView(context);
                 if (photo.userPhotoName.equals("")){
-                    String imgPath = getContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                    String imgPath = getContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+'/'+photo.photoName;
                     File imgFile = new  File(imgPath);
 
                     if(imgFile.exists()){
+                        ExifInterface exif = null;
+                        try {
+                            exif = new ExifInterface(imgFile.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                ExifInterface.ORIENTATION_UNDEFINED);
+
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        image.setImageBitmap(myBitmap);
+
+                        Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+
+                        image.setImageBitmap(bmRotated);
                     }
                 }
                 else{
-                    if (photo.userPhotoName.equals("")){
-                        String imgPath = getContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
-                        File imgFile = new  File(imgPath);
-
-                        if(imgFile.exists()){
-                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                            image.setImageBitmap(myBitmap);
-                        }
-                    }
-                    else {
-                        int resID = context.getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
-                        image.setImageResource(resID);
-                    }
+                    int resID = context.getResources().getIdentifier(Data.getPhoto(photoid).userPhotoName, "drawable", "cs147.picoachu");
+                    image.setImageResource(resID);
                 }
 
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.ExifInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +45,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PhotoDetailActivity extends AppCompatActivity {
@@ -128,12 +130,24 @@ public class PhotoDetailActivity extends AppCompatActivity {
         final ImageView imageView = (ImageView) findViewById(R.id.userPhotoView);
         Photo photo = Data.getPhoto(photoid);
             if (photo.userPhotoName.equals("")){
-                String imgPath = getApplicationContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+'/'+photo.photoName;
                 File imgFile = new  File(imgPath);
 
                 if(imgFile.exists()){
+                    ExifInterface exif = null;
+                    try {
+                        exif = new ExifInterface(imgFile.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_UNDEFINED);
+
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imageView.setImageBitmap(myBitmap);
+
+                    Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+
+                    imageView.setImageBitmap(bmRotated);
                 }
             }
             else {

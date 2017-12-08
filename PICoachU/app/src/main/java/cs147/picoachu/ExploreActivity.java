@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -23,6 +24,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ExploreActivity extends AppCompatActivity {
 
@@ -206,7 +208,7 @@ public class ExploreActivity extends AppCompatActivity {
         SquareImageView image;
         int counter = 0, resID;
         //ArrayList<Integer> photoids = Data.getUser(Data.currentUserId).photos;
-        for (int i =1; i<= 10; i++){
+        for (int i =1; i<= Data.getMaxPhotoId(); i++){
             if (counter%3 == 0){
                 tr = new TableRow(this);
                 tr.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -216,12 +218,24 @@ public class ExploreActivity extends AppCompatActivity {
 
             Photo photo = Data.getPhoto(photoid);
             if (photo.userPhotoName.equals("")){
-                String imgPath = getApplicationContext().getExternalFilesDir(null)+ Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
+                String imgPath = getApplicationContext().getExternalFilesDir(null).toString()+'/'+Integer.toString(photo.ownerid)+'/'+photo.photoName+".jpg";
                 File imgFile = new  File(imgPath);
 
                 if(imgFile.exists()){
+                    ExifInterface exif = null;
+                    try {
+                        exif = new ExifInterface(imgFile.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_UNDEFINED);
+
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    image.setImageBitmap(myBitmap);
+
+                    Bitmap bmRotated = Data.rotateBitmap(myBitmap, orientation);
+
+                    image.setImageBitmap(bmRotated);
                 }
             }
             else {
