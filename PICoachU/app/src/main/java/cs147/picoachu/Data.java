@@ -234,9 +234,15 @@ public class Data{
         File[] files = userDir.listFiles();
         if (files != null && files.length > 0) {
             for (File file : files) {
-                String[] presuf = file.toString().split(".");
-                if (presuf.length == 2 & presuf[1].equals("jpg") & !photoMapStr.containsKey(Integer.toString(user.userid) + presuf[0])) {
-                    Photo newPhoto = getPhoto(extDir, presuf[0]);
+                String jpgName = file.toString().split("/")[file.toString().split("/").length-1];
+                String imgName = jpgName.substring(0,jpgName.length()-4);
+                String suf = jpgName.substring(jpgName.length()-3,jpgName.length());
+                File jsonFile = new File(file.toString().replace(".jpg","_info.json"));
+
+                if (jpgName.length()>0 && suf.equals("jpg") &&
+                        jsonFile.exists() &&
+                        !photoMapStr.containsKey(Integer.toString(user.userid) + imgName)) {
+                    Photo newPhoto = getPhoto(extDir, imgName);
                     photoMap.put(Collections.max(user.photos) + 1, newPhoto);
                     user.photos.add(Collections.max(user.photos) + 1);
                 } else {

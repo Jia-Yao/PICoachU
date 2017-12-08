@@ -301,6 +301,8 @@ public class Camera2BasicFragment extends Fragment
      */
     private int mSensorOrientation;
 
+
+
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
      */
@@ -562,10 +564,19 @@ public class Camera2BasicFragment extends Fragment
                 }
 
                 // For still image captures, we use the largest available size.
-                Size largest = Collections.max(
-                        Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
-                        new CompareSizesByArea());
-                largest = new Size(4,3);
+                List<Size> outputSize = Arrays.asList(map.getOutputSizes(ImageFormat.JPEG));
+                Collections.sort(outputSize,new CompareSizesByArea());
+                Size largest = new Size(4,3);
+                for (Size s : outputSize){
+                    if (Math.abs(s.getWidth()/s.getHeight() - 4.0/3.0)<0.05){
+                        largest = s;
+                        break;
+                    }
+                }
+//                Size largest = Collections.max(
+//                        Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
+//                        new CompareSizesByArea());
+//                largest = new Size(4,3);
                 //Size largest = new ArrayList<Integer>(Arrays.asList(3,4));
                 mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
                         ImageFormat.JPEG, /*maxImages*/2);
