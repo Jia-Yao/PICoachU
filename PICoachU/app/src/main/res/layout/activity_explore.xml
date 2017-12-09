@@ -57,6 +57,16 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/trending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="Trending"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp"/>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">

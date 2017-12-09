@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +38,9 @@ public class ExploreActivity extends AppCompatActivity {
     Menu navigation_menu;
     EditText commentInput;
     ImageButton sendButton;
+    Typeface type;
+    Typeface type_reg;
+    TextView trending;
 
     // Switch to other activities
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -73,6 +80,8 @@ public class ExploreActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
+        type = Typeface.createFromAsset(getAssets(),"fonts/DIN Condensed Bold.ttf");
+        type_reg = Typeface.createFromAsset(getAssets(),"fonts/DIN Condensed Reg.ttf");
 
         // Set up bottom bar
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -83,7 +92,7 @@ public class ExploreActivity extends AppCompatActivity {
         menuItem.setChecked(true);
 
 
-
+        trending = (TextView)findViewById(R.id.trending);
         sendButton = (ImageButton) findViewById(R.id.sendButton);
         sendButton.setEnabled(false);
         commentInput = (EditText) findViewById(R.id.commentInput);
@@ -106,6 +115,8 @@ public class ExploreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // hide trending
+                trending.setVisibility(View.GONE);
                 // Set up photo display
                 TableLayout table = (TableLayout)findViewById(R.id.photosView);
                 table.removeAllViews();
@@ -198,7 +209,8 @@ public class ExploreActivity extends AppCompatActivity {
         });
 
 
-
+        // Trending
+        trending.setTypeface(type);
 
         // Set up photo display
         TableLayout table = (TableLayout)findViewById(R.id.photosView);
