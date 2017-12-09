@@ -206,6 +206,9 @@ public class PublishActivity extends AppCompatActivity {
         });
 
         // Set add tag button
+//        TextView addTagText = (TextView) findViewById(R.id.addTagText);
+//        addTagText.setTypeface(type_reg);
+
         addTagsView = (LinearLayout) findViewById(R.id.addTagsView);
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.setMargins(4, 0, 4, 0);
